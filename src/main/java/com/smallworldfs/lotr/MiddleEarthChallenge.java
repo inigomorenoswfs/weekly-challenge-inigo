@@ -5,34 +5,38 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class MiddleEarthChallenge {
 
-    public static void main (String args[]) {
-        EnumMap<GoodArmy, Integer> goodArmy = new EnumMap<GoodArmy, Integer>(GoodArmy.class);
-        EnumMap<EvilArmy, Integer> evilArmy = new EnumMap<EvilArmy, Integer>(EvilArmy.class);
+    public static void main (String[] args) {
+        EnumMap<GoodArmy, Integer> goodArmy = new EnumMap<>(GoodArmy.class);
+        EnumMap<EvilArmy, Integer> evilArmy = new EnumMap<>(EvilArmy.class);
 
-        goodArmy.put(GoodArmy.NUMENOREANO, 2);
-        evilArmy.put(EvilArmy.TROLL, 1);
+        goodArmy.put(GoodArmy.NUMENOREANO, 3);
+        evilArmy.put(EvilArmy.TROLL, 4);
 
         battleForMiddleEarth(goodArmy, evilArmy);
     }
 
     private static void battleForMiddleEarth(EnumMap<GoodArmy, Integer> goodArmy, EnumMap<EvilArmy, Integer> evilArmy) {
-        if (!isArmyEmpty(goodArmy) || !isArmyEmpty(evilArmy)) {
+        if (isNotArmyEmpty(goodArmy) && isNotArmyEmpty(evilArmy)) {
 
             AtomicInteger goodArmyScore = new AtomicInteger(0);
             AtomicInteger evilArmyScore = new AtomicInteger(0);
 
-            goodArmy.forEach((key, value) -> {
-                goodArmyScore.addAndGet(key.getScore() * value);
-            });
+            goodArmy.forEach((key, value) ->
+                goodArmyScore.addAndGet(key.getScore() * value)
+            );
 
-            evilArmy.forEach((key, value) -> {
-                evilArmyScore.addAndGet(key.getScore() * value);
-            });
+            evilArmy.forEach((key, value) ->
+                evilArmyScore.addAndGet(key.getScore() * value)
+            );
 
             battle(goodArmyScore.get(), evilArmyScore.get());
         } else {
             System.out.println("There are no enemies at sight");
         }
+    }
+
+    private static <K extends Enum<K>> boolean isNotArmyEmpty(EnumMap <K, Integer> army) {
+        return !army.isEmpty();
     }
 
     private static void battle(int goodArmyScore, int evilArmyScore) {
@@ -45,7 +49,5 @@ public class MiddleEarthChallenge {
         }
     }
 
-    private static <K extends Enum<K>> boolean isArmyEmpty(EnumMap <K, Integer> army) {
-        return army.isEmpty();
-    }
+
 }
